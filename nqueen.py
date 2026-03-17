@@ -1,108 +1,62 @@
-Coba posisi (0,0)
-Letakkan Queen
-Q . . .
-. . . .
-. . . .
-. . . .
+N = 4
 
-Coba posisi (1,0)
-Coba posisi (1,1)
-Coba posisi (1,2)
-Letakkan Queen
-Q . . .
-. . Q .
-. . . .
-. . . .
+board = [["." for _ in range(N)] for _ in range(N)]
 
-Coba posisi (2,0)
-Coba posisi (2,1)
-Coba posisi (2,2)
-Coba posisi (2,3)
-Backtrack
-Q . . .
-. . . .
-. . . .
-. . . .
+def print_board():
+    for row in board:
+        print(" ".join(row))
+    print()
 
-Coba posisi (1,3)
-Letakkan Queen
-Q . . .
-. . . Q
-. . . .
-. . . .
+def aman(row, col):
 
-Coba posisi (2,0)
-Coba posisi (2,1)
-Letakkan Queen
-Q . . .
-. . . Q
-. Q . .
-. . . .
+    # cek kolom
+    for i in range(row):
+        if board[i][col] == "Q":
+            return False
 
-Coba posisi (3,0)
-Coba posisi (3,1)
-Coba posisi (3,2)
-Coba posisi (3,3)
-Backtrack
-Q . . .
-. . . Q
-. . . .
-. . . .
+    # cek diagonal kiri
+    i, j = row-1, col-1
+    while i >= 0 and j >= 0:
+        if board[i][j] == "Q":
+            return False
+        i -= 1
+        j -= 1
 
-Coba posisi (2,2)
-Coba posisi (2,3)
-Backtrack
-Q . . .
-. . . .
-. . . .
-. . . .
+    # cek diagonal kanan
+    i, j = row-1, col+1
+    while i >= 0 and j < N:
+        if board[i][j] == "Q":
+            return False
+        i -= 1
+        j += 1
 
-Backtrack
-. . . .
-. . . .
-. . . .
-. . . .
-
-Coba posisi (0,1)
-Letakkan Queen
-. Q . .
-. . . .
-. . . .
-. . . .
-
-Coba posisi (1,0)
-Coba posisi (1,1)
-Coba posisi (1,2)
-Coba posisi (1,3)
-Letakkan Queen
-. Q . .
-. . . Q
-. . . .
-. . . .
-
-Coba posisi (2,0)
-Letakkan Queen
-. Q . .
-. . . Q
-Q . . .
-. . . .
-
-Coba posisi (3,0)
-Coba posisi (3,1)
-Coba posisi (3,2)
-Letakkan Queen
-. Q . .
-. . . Q
-Q . . .
-. . Q .
-
-SOLUSI DITEMUKAN
-
-. Q . .
-. . . Q
-Q . . .
-. . Q .
+    return True
 
 
+def solve(row):
 
-** Process exited - Return Code: 0 **
+    if row == N:
+        print("SOLUSI DITEMUKAN\n")
+        print_board()
+        return True
+
+    for col in range(N):
+
+        print(f"Coba posisi ({row},{col})")
+
+        if aman(row, col):
+            board[row][col] = "Q"
+            print("Letakkan Queen")
+            print_board()
+
+            if solve(row + 1):
+                return True
+
+            board[row][col] = "."
+            print("Backtrack")
+            print_board()
+
+    return False
+
+
+solve(0)
